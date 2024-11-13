@@ -1,0 +1,40 @@
+name: PicToCmd Publish Workflow
+
+# 触发器：在 main 分支上 push 时触发工作流
+on:
+  push:
+    branches:
+      - main  # 或者 master，如果你使用的是 master 分支
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 第一步：检出代码
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # 第二步：设置 Python 环境
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  # 使用你需要的 Python 版本
+
+    # 第三步：安装构建工具
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
+
+    # 第四步：构建包
+    - name: Build the package
+      run: python setup.py sdist bdist_wheel
+
+    # 第五步：上传到 PyPI
+    - name: Upload to PyPI
+      run: |
+        python -m twine upload dist/* -u __token__ -p ${{04007Wycwzqd}}
+      env:
+        TWINE_USERNAME: lebin_lv_kita
+        TWINE_PASSWORD: ${{ 04007Wycwzqd }}
